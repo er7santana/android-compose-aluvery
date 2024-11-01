@@ -8,4 +8,4 @@
 ## Screenshots
 
 - ![1](/screenshots/1.png)
-- ![2](/screenshots/2.png)
+- <img alt="2" height="500" src="/screenshots/2.png"/>
