@@ -107,7 +107,7 @@ fun ProductItem() {
 
         Column(
             Modifier
-                .height(260.dp)
+                .heightIn(250.dp, 300.dp)
                 .width(200.dp)
                 .verticalScroll(rememberScrollState())
         ) {
@@ -145,15 +145,6 @@ fun ProductItem() {
                         fontSize = 14.sp,
                         fontWeight = FontWeight(400),
                     )
-                }
-
-                Column(
-                    Modifier.fillMaxSize()
-                        .background(Purple40)
-                        .offset(y = (-10).dp)
-                        .background(Purple40)
-                ) {
-                    Text(LoremIpsum(50).values.first(), Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
                 }
             }
         }
