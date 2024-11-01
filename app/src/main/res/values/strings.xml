@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Aluvery</string>
+    <string name="title_activity_challenge01">Challenge01Activity</string>
 </resources>
