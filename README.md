@@ -7,5 +7,5 @@
 
 ## Screenshots
 
-- ![1](/screenshots/1.png)
-- <img alt="2" height="500" src="/screenshots/2.png"/>
+<img alt="1" height="500" src="/screenshots/1.png"/>
+<img alt="2" height="500" src="/screenshots/2.png"/>
