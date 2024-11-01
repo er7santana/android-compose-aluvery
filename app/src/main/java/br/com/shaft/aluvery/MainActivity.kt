@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +22,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -50,7 +55,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             AluveryTheme {
                 Surface {
-                    ProductItem()
+                    ProductsSection()
                 }
             }
 
@@ -58,15 +63,44 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun ProductItem() {
+fun ProductsSection() {
+    Column {
+        Text(
+            "Promoções",
+            Modifier.padding(
+                start = 16.dp,
+                top = 16.dp,
+                end = 16.dp
+            ),
+            fontSize = 20.sp,
+            fontWeight = FontWeight(400)
+        )
+
+        Row(
+            Modifier
+                .padding(
+                    top = 8.dp,
+                    bottom = 16.dp
+                )
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp)
+            ,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            ProductItem()
+            ProductItem()
+            ProductItem()
+        }
+    }
+}
+
+@Composable
+fun ProductItem() {
     Surface(
         shape = RoundedCornerShape(15.dp),
-        shadowElevation = 4.dp,
-        modifier = Modifier
-            .padding(8.dp)
-            .width(200.dp)
+        shadowElevation = 4.dp
     ) {
 
         Column(
@@ -86,9 +120,10 @@ private fun ProductItem() {
                     contentDescription = null,
                     Modifier
                         .size(imageSize)
-                        .offset(y = (imageSize/2))
+                        .offset(y = (imageSize / 2))
                         .clip(shape = CircleShape)
                         .align(BottomCenter)
+                        .border(2.dp, Color.White, shape = CircleShape)
                 )
             }
             Spacer(Modifier.height(imageSize/2))
@@ -108,5 +143,21 @@ private fun ProductItem() {
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProductItemPreview() {
+    AluveryTheme {
+        ProductItem()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ProductsSectionPreview() {
+    AluveryTheme {
+        ProductsSection()
     }
 }
