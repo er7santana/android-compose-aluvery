@@ -26,6 +26,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -46,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 import br.com.shaft.aluvery.ui.theme.Purple40
+import br.com.shaft.aluvery.ui.theme.Purple80
 import br.com.shaft.aluvery.ui.theme.Teal200
 
 class MainActivity : ComponentActivity() {
@@ -105,8 +107,9 @@ fun ProductItem() {
 
         Column(
             Modifier
-                .heightIn(250.dp, 300.dp)
+                .height(260.dp)
                 .width(200.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             val imageSize = 100.dp
             Box(modifier = Modifier
@@ -127,20 +130,31 @@ fun ProductItem() {
                 )
             }
             Spacer(Modifier.height(imageSize/2))
-            Column(Modifier.padding(16.dp)) {
-                Text(
-                    LoremIpsum(50).values.first(),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight(700),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Text(
-                    "R$ 14,99",
-                    Modifier.padding(top = 8.dp),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight(400),
-                )
+            Column(Modifier.fillMaxSize()) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        LoremIpsum(50).values.first(),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight(700),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        "R$ 14,99",
+                        Modifier.padding(top = 8.dp),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight(400),
+                    )
+                }
+
+                Column(
+                    Modifier.fillMaxSize()
+                        .background(Purple40)
+                        .offset(y = (-10).dp)
+                        .background(Purple40)
+                ) {
+                    Text(LoremIpsum(50).values.first(), Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                }
             }
         }
     }
