@@ -40,8 +40,6 @@ import br.com.shaft.aluvery.extensions.toBrazilianCurrency
 import br.com.shaft.aluvery.models.Product
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import java.math.BigDecimal
 
 @Composable
