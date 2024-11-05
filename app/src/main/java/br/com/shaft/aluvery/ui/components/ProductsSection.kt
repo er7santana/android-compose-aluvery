@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,17 +34,16 @@ fun ProductsSection(title: String, products: List<Product>) {
             fontWeight = FontWeight(400)
         )
 
-        Row(
+        LazyRow (
             Modifier
                 .padding(
                     top = 8.dp,
                 )
                 .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            products.forEach { product ->
+            items(products) { product ->
                 ProductItem(product)
             }
         }
