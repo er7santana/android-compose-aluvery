@@ -22,7 +22,6 @@ import br.com.shaft.aluvery.ui.theme.AluveryTheme
 @Composable
 fun AllProductsGrid(products: List<Product>) {
     LazyVerticalGrid(
-//        columns = GridCells.Adaptive(minSize = 140.dp),
         columns = GridCells.Fixed(2),
         Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -33,7 +32,7 @@ fun AllProductsGrid(products: List<Product>) {
         }) {
             Text("Todos produtos",
                 Modifier.fillMaxWidth(),
-                fontSize = 30.sp,
+                fontSize = 32.sp,
                 fontWeight = FontWeight(400)
             )
         }
