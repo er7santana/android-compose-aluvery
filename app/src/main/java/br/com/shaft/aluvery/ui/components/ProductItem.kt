@@ -1,6 +1,5 @@
 package br.com.shaft.aluvery.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -27,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +39,9 @@ import br.com.shaft.aluvery.R
 import br.com.shaft.aluvery.extensions.toBrazilianCurrency
 import br.com.shaft.aluvery.models.Product
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import java.math.BigDecimal
 
 @Composable
@@ -60,17 +64,17 @@ fun ProductItem(product: Product) {
                 .fillMaxWidth()
 
             ) {
-                Image(
-                    // TODO: ajustar imagem do produto
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                AsyncImage(
+                    model = product.image,
                     contentDescription = null,
-                    Modifier
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
                         .size(imageSize)
                         .offset(y = (imageSize / 2))
                         .clip(shape = CircleShape)
                         .align(BottomCenter)
+                        .background(Color.LightGray)
                         .border(2.dp, Color.White, shape = CircleShape),
-                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
                 )
             }
             Spacer(Modifier.height(imageSize/2))

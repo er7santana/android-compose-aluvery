@@ -48,7 +48,7 @@ val sampleProducts = listOf(
     Product(
         "Hamburguer",
         BigDecimal(14.99),
-        image = "https://firebasestorage.googleapis.com/v0/b/alura-square-f83d3.firebasestorage.app/o/aluvery%2Fhamburger.jpeg?alt=media&token=c2eb5ab7-5a83-432d-ab12-a1efbfaca2bf"
+        image = "https://cms.santander.com.br/sites/WPS/imagem/imagem-nova-loja-cartao-unique-black/23-12-20_190828_P_unique.png"
     ),
     Product(
         "Batata frita",
