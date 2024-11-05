@@ -10,11 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.shaft.aluvery.sampledata.sampleProducts
+import androidx.compose.material3.Surface
+import br.com.shaft.aluvery.models.Product
+import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.components.ProductsSection
+import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    sections: Map<String, List<Product>>
+) {
     Column(
         Modifier
             .fillMaxSize()
@@ -22,14 +27,20 @@ fun HomeScreen() {
             .padding(top = 16.dp, bottom = 48.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        ProductsSection("Promoções", sampleProducts)
-        ProductsSection("Favoritos", sampleProducts)
-        ProductsSection("Baseado na última compra", sampleProducts)
+        for (section in sections) {
+            val title = section.key
+            val products = section.value
+            ProductsSection(title, products)
+        }
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen()
+    AluveryTheme {
+        Surface {
+            HomeScreen(sampleSections)
+        }
+    }
 }

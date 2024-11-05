@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,8 +38,6 @@ import br.com.shaft.aluvery.R
 import br.com.shaft.aluvery.extensions.toBrazilianCurrency
 import br.com.shaft.aluvery.models.Product
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
-import br.com.shaft.aluvery.ui.theme.Purple40
-import br.com.shaft.aluvery.ui.theme.Teal200
 import java.math.BigDecimal
 
 @Composable
@@ -57,12 +56,13 @@ fun ProductItem(product: Product) {
             val imageSize = 100.dp
             Box(modifier = Modifier
                 .height(imageSize)
-                .background(brush = Brush.horizontalGradient(listOf(Purple40, Teal200)))
+                .background(brush = Brush.horizontalGradient(listOf(MaterialTheme.colorScheme.primary, MaterialTheme.colorScheme.secondary)))
                 .fillMaxWidth()
 
             ) {
                 Image(
-                    painter = painterResource(product.image),
+                    // TODO: ajustar imagem do produto
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
                     contentDescription = null,
                     Modifier
                         .size(imageSize)
@@ -99,12 +99,13 @@ fun ProductItem(product: Product) {
 @Composable
 private fun ProductItemPreview() {
     AluveryTheme {
-        ProductItem(
-            product = Product(
-                LoremIpsum(50).values.first(),
-                BigDecimal(14.99),
-                R.drawable.placeholder
+        Surface {
+            ProductItem(
+                Product(
+                    name = LoremIpsum(50).values.first(),
+                    price = BigDecimal(14.99),
+                )
             )
-        )
+        }
     }
 }
