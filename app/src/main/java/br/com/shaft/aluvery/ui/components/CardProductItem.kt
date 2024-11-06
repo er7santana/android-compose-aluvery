@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -25,7 +27,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import br.com.shaft.aluvery.R
 import br.com.shaft.aluvery.extensions.toBrazilianCurrency
 import br.com.shaft.aluvery.models.Product
@@ -39,11 +40,13 @@ fun CardProductItem(
     modifier: Modifier = Modifier,
     elevation: Dp = 4.dp
 ) {
-    Card(
+    Surface(
         modifier
             .fillMaxWidth()
             .heightIn(150.dp)
-            .shadow(elevation),
+            .background(Color.White),
+        shape = RoundedCornerShape(15.dp),
+        shadowElevation = elevation
         ) {
 
         var expanded by remember { mutableStateOf(false) }

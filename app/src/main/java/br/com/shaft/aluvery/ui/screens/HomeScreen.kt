@@ -1,5 +1,6 @@
 package br.com.shaft.aluvery.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.shaft.aluvery.R
 import br.com.shaft.aluvery.models.Product
+import br.com.shaft.aluvery.sampledata.sampleProducts
 import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.components.CardProductItem
 import br.com.shaft.aluvery.ui.components.ProductsSection
@@ -36,9 +38,10 @@ private const val TAG = "HomeScreen"
 
 @Composable
 fun HomeScreen(
-    sections: Map<String, List<Product>>
+    sections: Map<String, List<Product>>,
+    searchText: String = ""
 ) {
-    var text by remember { mutableStateOf("") }
+    var text by remember { mutableStateOf(searchText) }
 
     Column {
         OutlinedTextField(
@@ -69,18 +72,17 @@ fun HomeScreen(
                 .padding(top = 16.dp, bottom = 48.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-//            for (section in sections) {
-//                val title = section.key
-//                val products = section.value
-//                item {
-//                    ProductsSection(title, products)
-//                }
-//            }
-            for (section in sections) {
-                for (product in section.value) {
+            if (text.isBlank()) {
+                for (section in sections) {
+                    val title = section.key
+                    val products = section.value
                     item {
-                        CardProductItem(product, Modifier.padding(horizontal = 16.dp))
+                        ProductsSection(title, products)
                     }
+                }
+            } else {
+                items(sampleProducts) { product ->
+                    CardProductItem(product, Modifier.padding(horizontal = 16.dp))
                 }
             }
         }
@@ -93,6 +95,15 @@ private fun HomeScreenPreview() {
     AluveryTheme {
         Surface {
             HomeScreen(sampleSections)
+        }
+    }
+}
+@Preview(showSystemUi = true)
+@Composable
+private fun HomeScreenWithSearchTextPreview() {
+    AluveryTheme {
+        Surface {
+            HomeScreen(sampleSections, searchText = "Hamburguer")
         }
     }
 }
