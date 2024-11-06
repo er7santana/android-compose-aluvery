@@ -1,13 +1,11 @@
-package br.com.shaft.aluvery
+package br.com.shaft.aluvery.ui.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import br.com.shaft.aluvery.sampledata.sampleProducts
 import br.com.shaft.aluvery.sampledata.sampleSections
-import br.com.shaft.aluvery.ui.components.AllProductsGrid
 import br.com.shaft.aluvery.ui.screens.HomeScreen
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
