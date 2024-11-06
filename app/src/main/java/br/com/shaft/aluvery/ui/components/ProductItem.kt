@@ -27,15 +27,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.shaft.aluvery.R
 import br.com.shaft.aluvery.extensions.toBrazilianCurrency
 import br.com.shaft.aluvery.models.Product
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
@@ -43,8 +40,12 @@ import coil3.compose.AsyncImage
 import java.math.BigDecimal
 
 @Composable
-fun ProductItem(product: Product) {
+fun ProductItem(
+    product: Product,
+    modifier: Modifier = Modifier,
+) {
     Surface(
+        modifier,
         shape = RoundedCornerShape(15.dp),
         shadowElevation = 4.dp
     ) {
@@ -106,6 +107,7 @@ private fun ProductItemPreview() {
                 Product(
                     name = LoremIpsum(50).values.first(),
                     price = BigDecimal(14.99),
+                    description = null,
                 )
             )
         }

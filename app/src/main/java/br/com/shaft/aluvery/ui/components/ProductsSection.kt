@@ -23,8 +23,12 @@ import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
 
 @Composable
-fun ProductsSection(title: String, products: List<Product>) {
-    Column {
+fun ProductsSection(
+    title: String,
+    products: List<Product>,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
         Text(
             title,
             Modifier.padding(
