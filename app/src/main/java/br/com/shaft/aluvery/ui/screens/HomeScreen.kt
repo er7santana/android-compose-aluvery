@@ -32,6 +32,7 @@ import br.com.shaft.aluvery.sampledata.sampleProducts
 import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.components.CardProductItem
 import br.com.shaft.aluvery.ui.components.ProductsSection
+import br.com.shaft.aluvery.ui.components.SearchTextField
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
 private const val TAG = "HomeScreen"
@@ -53,27 +54,10 @@ fun HomeScreen(
     }
 
     Column {
-        OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text("Produto", color = Color.Gray)},
-            modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(100),
-            leadingIcon = {
-                Icon(
-                    Icons.Default.Search,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .size(24.dp)
-                )
-            },
-            placeholder =  {
-                Text("O que você procura?", color = Color.Gray)
-            }
-        )
+
+        SearchTextField(text) {
+            text = it
+        }
 
         LazyColumn(
             Modifier
