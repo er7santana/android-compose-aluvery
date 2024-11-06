@@ -4,6 +4,9 @@
 
 - Criação de views usando Jetpack Compose
 - Rolagem vertical e horizontal
+- AsyncImage com Coil
+- Filtro de itens
+- Conteúdo dinâmico
 
 ## Screenshots
 
