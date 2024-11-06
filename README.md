@@ -8,6 +8,4 @@
 - Filtro de itens
 - Conteúdo dinâmico
 
-## Screenshots
-
 <img alt="0" src="/screenshots/0.gif"/>
