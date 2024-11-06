@@ -7,6 +7,7 @@
 - AsyncImage com Coil
 - Filtro de itens
 - Conteúdo dinâmico
+- State Hoisting
 
 ## Preview
 
