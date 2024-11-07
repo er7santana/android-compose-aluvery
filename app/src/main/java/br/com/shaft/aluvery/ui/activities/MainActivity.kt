@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.shaft.aluvery.dao.ProductDao
@@ -20,6 +21,7 @@ import br.com.shaft.aluvery.sampledata.sampleCandies
 import br.com.shaft.aluvery.sampledata.sampleDrinks
 import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.screens.HomeScreen
+import br.com.shaft.aluvery.ui.screens.HomeScreenUiState
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +40,8 @@ class MainActivity : ComponentActivity() {
                     "Doces" to sampleCandies,
                     "Bebidas" to sampleDrinks,
                 )
-                HomeScreen(sections = sections)
+                val state = remember { HomeScreenUiState() }
+                HomeScreen(sections = sections, state = state)
             }
         }
     }

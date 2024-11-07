@@ -30,6 +30,7 @@ private const val TAG = "HomeScreen"
 class HomeScreenUiState(searchText: String = "") {
 
     var text by mutableStateOf(searchText)
+        private set
 
     val filteredProducts get() =
         if (text.isNotBlank()) {
@@ -43,19 +44,20 @@ class HomeScreenUiState(searchText: String = "") {
     fun isShowSections(): Boolean {
         return text.isBlank()
     }
+
+    val onSearchChange: (String) -> Unit = {
+        text = it
+    }
 }
 
 @Composable
 fun HomeScreen(
     sections: Map<String, List<Product>>,
-    searchText: String = ""
+    state: HomeScreenUiState = HomeScreenUiState(),
 ) {
-    val state = remember { HomeScreenUiState(searchText) }
     Column {
 
-        SearchTextField(state.text) {
-            state.text = it
-        }
+        SearchTextField(state.text, onSearchChange = state.onSearchChange)
 
         LazyColumn(
             Modifier
@@ -98,7 +100,7 @@ private fun HomeScreenPreview() {
 private fun HomeScreenWithSearchTextPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections, searchText = "Hamburguer")
+            HomeScreen(sampleSections, state = HomeScreenUiState("Candy"))
         }
     }
 }
