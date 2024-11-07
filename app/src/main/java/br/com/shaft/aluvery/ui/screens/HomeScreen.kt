@@ -3,6 +3,7 @@ package br.com.shaft.aluvery.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -62,7 +63,7 @@ fun HomeScreen(
         LazyColumn(
             Modifier
                 .fillMaxSize()
-                .padding(top = 16.dp, bottom = 48.dp),
+                .padding(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (text.isBlank()) {
@@ -77,6 +78,10 @@ fun HomeScreen(
                 items(filteredProducts) { product ->
                     CardProductItem(product, Modifier.padding(horizontal = 16.dp))
                 }
+            }
+
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
         }
     }
