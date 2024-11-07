@@ -15,23 +15,37 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import br.com.shaft.aluvery.dao.ProductDao
+import br.com.shaft.aluvery.sampledata.sampleCandies
+import br.com.shaft.aluvery.sampledata.sampleDrinks
 import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.screens.HomeScreen
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
 class MainActivity : ComponentActivity() {
+
+    private val dao = ProductDao()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             App(onFabClick = {
                 startActivity(Intent(this, ProductFormActivity::class.java))
-            })
+            }) {
+                val sections = mapOf(
+                    "Todos produtos" to dao.products(),
+                    "Promoções" to sampleDrinks + sampleCandies,
+                    "Doces" to sampleCandies,
+                    "Bebidas" to sampleDrinks,
+                )
+                HomeScreen(sections = sections)
+            }
         }
     }
 }
 
 @Composable
-fun App(onFabClick: () -> Unit = {}) {
+fun App(onFabClick: () -> Unit = {}, content: @Composable () -> Unit = {}) {
     AluveryTheme {
         Surface {
             Scaffold(floatingActionButton = {
@@ -40,8 +54,7 @@ fun App(onFabClick: () -> Unit = {}) {
                 }
             }) { paddingValues ->
                 Box(modifier = Modifier.padding(paddingValues)) {
-                    HomeScreen(sampleSections)
-                    // AllProductsGrid(sampleProducts)
+                    content()
                 }
             }
         }
@@ -51,5 +64,7 @@ fun App(onFabClick: () -> Unit = {}) {
 @Preview
 @Composable
 private fun AppPreview() {
-    App()
+    App() {
+        HomeScreen(sections = sampleSections)
+    }
 }
