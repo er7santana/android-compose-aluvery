@@ -34,9 +34,76 @@ import br.com.shaft.aluvery.ui.theme.AluveryTheme
 import coil3.compose.AsyncImage
 import java.math.BigDecimal
 
+class ProductFormScreenUiState(
+    val onSaveClick: (Product) -> Unit = {}
+) {
+    var url by mutableStateOf("")
+    var name by mutableStateOf("")
+    var price by mutableStateOf("")
+    var isPriceError by mutableStateOf(false)
+    var description by mutableStateOf("")
+
+    fun isShowImage(): Boolean {
+        return url.isNotBlank()
+    }
+
+    fun onUrlValueChange(value: String) {
+        url = value
+    }
+
+    fun onNameValueChange(value: String) {
+        name = value
+    }
+
+    fun onDescriptionValueChange(value: String) {
+        description = value
+    }
+
+    fun onPriceValueChange(value: String) {
+        isPriceError = try {
+            BigDecimal(value)
+            false
+        } catch (e:IllegalArgumentException) {
+            value.isNotEmpty()
+        }
+        price = value
+    }
+
+    fun onSaveClick() {
+        val convertedPrice = try {
+            BigDecimal(price)
+        } catch (e: NumberFormatException) {
+            BigDecimal.ZERO
+        }
+        val product = Product(
+            name = name,
+            image = url,
+            price = convertedPrice,
+            description = description
+        )
+        onSaveClick(product)
+    }
+
+}
 
 @Composable
 fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> Unit = {}) {
+    var url by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("") }
+    var isPriceError by remember { mutableStateOf(false) }
+    var description by remember { mutableStateOf("") }
+
+    ProductFormScreen(
+        modifier = modifier,
+        state = ProductFormScreenUiState(
+            onSaveClick = { onSaveClick(it) }
+        )
+    )
+}
+
+@Composable
+fun ProductFormScreen(modifier: Modifier = Modifier, state: ProductFormScreenUiState = ProductFormScreenUiState()) {
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -44,20 +111,14 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
 
-        var url by remember { mutableStateOf("") }
-        var name by remember { mutableStateOf("") }
-        var price by remember { mutableStateOf("") }
-        var isPriceError by remember { mutableStateOf(false) }
-        var description by remember { mutableStateOf("") }
-
         Text(
             "Criando o produto",
             fontSize = 28.sp
         )
 
-        if (url.isNotBlank()) {
+        if (state.isShowImage()) {
             AsyncImage(
-                model = url,
+                model = state.url,
                 contentDescription = null,
                 Modifier
                     .fillMaxWidth()
@@ -69,7 +130,7 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
         }
 
         TextField(
-            url,
+            state.url,
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text("Url da imagem")
@@ -78,10 +139,10 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
                 keyboardType = KeyboardType.Uri,
                 imeAction = ImeAction.Next
             ),
-            onValueChange = { url = it }
+            onValueChange = { state.onUrlValueChange(it) }
         )
         TextField(
-            name,
+            state.name,
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text("Nome")
@@ -90,10 +151,10 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
                 capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
             ),
-            onValueChange = { name = it }
+            onValueChange = { state.onNameValueChange(it) }
         )
         TextField(
-            price,
+            state.price,
             modifier = Modifier.fillMaxWidth(),
             label = {
                 Text("Preço")
@@ -102,18 +163,10 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
                 keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             ),
-            isError = isPriceError,
-            onValueChange = {
-                isPriceError = try {
-                    BigDecimal(it)
-                    false
-                } catch (e:IllegalArgumentException) {
-                    it.isNotEmpty()
-                }
-                price = it
-            }
+            isError = state.isPriceError,
+            onValueChange = { state.onPriceValueChange(it) }
         )
-        if (isPriceError) {
+        if (state.isPriceError) {
             Text(
                 text = "Preço deve ser um número decimal",
                 color = MaterialTheme.colorScheme.error,
@@ -122,7 +175,7 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
             )
         }
         TextField(
-            description,
+            state.description,
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(100.dp),
@@ -132,21 +185,10 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
             ),
-            onValueChange = { description = it }
+            onValueChange = { state.onDescriptionValueChange(it) }
         )
         Button(onClick = {
-            val convertedPrice = try {
-                BigDecimal(price)
-            } catch (e: NumberFormatException) {
-                BigDecimal.ZERO
-            }
-            val product = Product(
-                name = name,
-                image = url,
-                price = convertedPrice,
-                description = description
-            )
-            onSaveClick(product)
+            state.onSaveClick()
         }, Modifier.fillMaxWidth()) {
             Text("Salvar")
         }
@@ -158,7 +200,7 @@ fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> U
 private fun ProductFormScreenPreview() {
     AluveryTheme {
         Surface {
-            ProductFormScreen()
+            ProductFormScreen(state = ProductFormScreenUiState())
         }
     }
 }
