@@ -40,35 +40,7 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, ProductFormActivity::class.java))
             }) {
                 val products = dao.products()
-                val sections = mapOf(
-                    "Todos produtos" to products,
-                    "Promoções" to sampleDrinks + sampleCandies,
-                    "Doces" to sampleCandies,
-                    "Bebidas" to sampleDrinks,
-                )
-
-                var searchText by remember { mutableStateOf("") }
-
-                fun containsInNameOrDescription() = { product: Product ->
-                    product.name.contains(searchText, ignoreCase = true) || product.description?.contains(
-                        searchText, ignoreCase = true
-                    ) ?: false
-                }
-
-                val filteredProducts = remember(searchText, products) {
-                    if (searchText.isNotBlank()) {
-                        sampleProducts.filter(containsInNameOrDescription()) +
-                                products.filter(containsInNameOrDescription())
-                    } else emptyList()
-                }
-
-                val state = remember(products, searchText) { HomeScreenUiState(
-                    sections = sections,
-                    filteredProducts = filteredProducts,
-                    searchText = searchText,
-                    onSearchChange = { searchText = it }
-                ) }
-                HomeScreen(state = state)
+                HomeScreen(products)
             }
         }
     }
