@@ -27,19 +27,25 @@ import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
 private const val TAG = "HomeScreen"
 
-class HomeScreenUiState(searchText: String = "") {
+class HomeScreenUiState(
+    val sections: Map<String, List<Product>> = emptyMap(),
+    private val products: List<Product> = emptyList(),
+    searchText: String = "") {
 
     var text by mutableStateOf(searchText)
         private set
 
     val filteredProducts get() =
         if (text.isNotBlank()) {
-            sampleProducts.filter { product ->
-                product.name.contains(text, ignoreCase = true) || product.description?.contains(
-                    text, ignoreCase = true
-                ) ?: false
-            }
+            sampleProducts.filter(containsInNameOrDescription()) +
+                    products.filter(containsInNameOrDescription())
         } else emptyList()
+
+    private fun containsInNameOrDescription() = { product: Product ->
+        product.name.contains(text, ignoreCase = true) || product.description?.contains(
+            text, ignoreCase = true
+        ) ?: false
+    }
 
     fun isShowSections(): Boolean {
         return text.isBlank()
@@ -52,7 +58,6 @@ class HomeScreenUiState(searchText: String = "") {
 
 @Composable
 fun HomeScreen(
-    sections: Map<String, List<Product>>,
     state: HomeScreenUiState = HomeScreenUiState(),
 ) {
     Column {
@@ -66,7 +71,7 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (state.isShowSections()) {
-                for (section in sections) {
+                for (section in state.sections) {
                     val title = section.key
                     val products = section.value
                     item {
@@ -91,7 +96,7 @@ fun HomeScreen(
 private fun HomeScreenPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections)
+            HomeScreen(HomeScreenUiState(sections = sampleSections))
         }
     }
 }
@@ -100,7 +105,7 @@ private fun HomeScreenPreview() {
 private fun HomeScreenWithSearchTextPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(sampleSections, state = HomeScreenUiState("Candy"))
+            HomeScreen(state = HomeScreenUiState(sections = sampleSections, products = emptyList(), "Abacaxi"))
         }
     }
 }

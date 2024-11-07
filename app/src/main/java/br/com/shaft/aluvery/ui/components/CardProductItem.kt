@@ -79,14 +79,16 @@ fun CardProductItem(
                     fontWeight = FontWeight.SemiBold
                 )
             }
-            product.description?.let {
-                Text(
-                    text = product.description,
-                    Modifier
-                        .padding(16.dp),
-                    maxLines = if (expanded) Int.MAX_VALUE else 2,
-                    overflow = TextOverflow.Ellipsis
-                )
+            product.description?.let { description ->
+                if (description.isNotBlank()) {
+                    Text(
+                        text = product.description,
+                        Modifier
+                            .padding(16.dp),
+                        maxLines = if (expanded) Int.MAX_VALUE else 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
             }
         }
     }
