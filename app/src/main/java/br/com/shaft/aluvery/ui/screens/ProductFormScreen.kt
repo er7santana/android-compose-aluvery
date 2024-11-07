@@ -35,29 +35,29 @@ import coil3.compose.AsyncImage
 import java.math.BigDecimal
 
 class ProductFormScreenUiState(
-    val onSaveClick: (Product) -> Unit = {}
+    val url: String = "",
+    val name: String = "",
+    val price: String = "",
+    val description: String = "",
+    val isPriceError: Boolean = false,
+    val onUrlValueChange: (String) -> Unit = {},
+    val onNameValueChange: (String) -> Unit = {},
+    val onPriceValueChange: (String) -> Unit = {},
+    val onDescriptionValueChange: (String) -> Unit = {},
+    val onSaveClick: () -> Unit = {}
 ) {
-    var url by mutableStateOf("")
-    var name by mutableStateOf("")
-    var price by mutableStateOf("")
-    var isPriceError by mutableStateOf(false)
-    var description by mutableStateOf("")
-
     fun isShowImage(): Boolean {
         return url.isNotBlank()
     }
+}
 
-    fun onUrlValueChange(value: String) {
-        url = value
-    }
-
-    fun onNameValueChange(value: String) {
-        name = value
-    }
-
-    fun onDescriptionValueChange(value: String) {
-        description = value
-    }
+@Composable
+fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> Unit = {}) {
+    var url by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("") }
+    var isPriceError by remember { mutableStateOf(false) }
+    var description by remember { mutableStateOf("") }
 
     fun onPriceValueChange(value: String) {
         isPriceError = try {
@@ -84,21 +84,24 @@ class ProductFormScreenUiState(
         onSaveClick(product)
     }
 
-}
-
-@Composable
-fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> Unit = {}) {
-    var url by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
-    var isPriceError by remember { mutableStateOf(false) }
-    var description by remember { mutableStateOf("") }
+    val state = remember(url, name, price, description, isPriceError) {
+        ProductFormScreenUiState(
+            url = url,
+            name = name,
+            price = price,
+            description = description,
+            isPriceError = isPriceError,
+            onUrlValueChange = { url = it },
+            onNameValueChange = { name = it },
+            onPriceValueChange = { onPriceValueChange(it) },
+            onDescriptionValueChange = { description = it },
+            onSaveClick = { onSaveClick() }
+        )
+    }
 
     ProductFormScreen(
         modifier = modifier,
-        state = ProductFormScreenUiState(
-            onSaveClick = { onSaveClick(it) }
-        )
+        state = state
     )
 }
 
