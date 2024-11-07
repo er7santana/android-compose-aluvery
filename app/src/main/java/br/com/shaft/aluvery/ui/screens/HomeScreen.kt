@@ -10,10 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,34 +21,14 @@ import br.com.shaft.aluvery.ui.components.ProductsSection
 import br.com.shaft.aluvery.ui.components.SearchTextField
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 
-private const val TAG = "HomeScreen"
-
 class HomeScreenUiState(
     val sections: Map<String, List<Product>> = emptyMap(),
-    private val products: List<Product> = emptyList(),
-    searchText: String = "") {
-
-    var text by mutableStateOf(searchText)
-        private set
-
-    val filteredProducts get() =
-        if (text.isNotBlank()) {
-            sampleProducts.filter(containsInNameOrDescription()) +
-                    products.filter(containsInNameOrDescription())
-        } else emptyList()
-
-    private fun containsInNameOrDescription() = { product: Product ->
-        product.name.contains(text, ignoreCase = true) || product.description?.contains(
-            text, ignoreCase = true
-        ) ?: false
-    }
+    val filteredProducts: List<Product> = emptyList(),
+    val searchText: String = "",
+    val onSearchChange: (String) -> Unit = {}) {
 
     fun isShowSections(): Boolean {
-        return text.isBlank()
-    }
-
-    val onSearchChange: (String) -> Unit = {
-        text = it
+        return searchText.isBlank()
     }
 }
 
@@ -62,7 +38,7 @@ fun HomeScreen(
 ) {
     Column {
 
-        SearchTextField(state.text, onSearchChange = state.onSearchChange)
+        SearchTextField(state.searchText, onSearchChange = state.onSearchChange)
 
         LazyColumn(
             Modifier
@@ -105,7 +81,7 @@ private fun HomeScreenPreview() {
 private fun HomeScreenWithSearchTextPreview() {
     AluveryTheme {
         Surface {
-            HomeScreen(state = HomeScreenUiState(sections = sampleSections, products = emptyList(), "Abacaxi"))
+            HomeScreen(state = HomeScreenUiState(sections = sampleSections, filteredProducts = emptyList(), "Abacaxi"))
         }
     }
 }

@@ -13,12 +13,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.com.shaft.aluvery.dao.ProductDao
+import br.com.shaft.aluvery.models.Product
 import br.com.shaft.aluvery.sampledata.sampleCandies
 import br.com.shaft.aluvery.sampledata.sampleDrinks
+import br.com.shaft.aluvery.sampledata.sampleProducts
 import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.screens.HomeScreen
 import br.com.shaft.aluvery.ui.screens.HomeScreenUiState
@@ -41,14 +46,33 @@ class MainActivity : ComponentActivity() {
                     "Doces" to sampleCandies,
                     "Bebidas" to sampleDrinks,
                 )
-                val state = remember(products) { HomeScreenUiState(
+
+                var searchText by remember { mutableStateOf("") }
+
+                fun containsInNameOrDescription() = { product: Product ->
+                    product.name.contains(searchText, ignoreCase = true) || product.description?.contains(
+                        searchText, ignoreCase = true
+                    ) ?: false
+                }
+
+                val filteredProducts = remember(searchText, products) {
+                    if (searchText.isNotBlank()) {
+                        sampleProducts.filter(containsInNameOrDescription()) +
+                                products.filter(containsInNameOrDescription())
+                    } else emptyList()
+                }
+
+                val state = remember(products, searchText) { HomeScreenUiState(
                     sections = sections,
-                    products = products
+                    filteredProducts = filteredProducts,
+                    searchText = searchText,
+                    onSearchChange = { searchText = it }
                 ) }
                 HomeScreen(state = state)
             }
         }
     }
+
 }
 
 @Composable
