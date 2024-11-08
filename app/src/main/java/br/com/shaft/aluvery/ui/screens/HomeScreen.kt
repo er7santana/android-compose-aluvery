@@ -23,7 +23,6 @@ import br.com.shaft.aluvery.ui.viewmodels.HomeScreenViewModel
 
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel) {
-
     val state = viewModel.uiState
     HomeScreen(state)
 }
