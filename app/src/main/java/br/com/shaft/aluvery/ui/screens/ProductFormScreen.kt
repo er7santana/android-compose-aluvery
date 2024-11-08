@@ -15,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,74 +32,39 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.shaft.aluvery.R
 import br.com.shaft.aluvery.models.Product
+import br.com.shaft.aluvery.ui.states.ProductFormScreenUiState
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
+import br.com.shaft.aluvery.ui.viewmodels.ProductFormScreenViewModel
 import coil3.compose.AsyncImage
 import java.math.BigDecimal
 
-class ProductFormScreenUiState(
-    val url: String = "",
-    val name: String = "",
-    val price: String = "",
-    val description: String = "",
-    val isPriceError: Boolean = false,
-    val onUrlValueChange: (String) -> Unit = {},
-    val onNameValueChange: (String) -> Unit = {},
-    val onPriceValueChange: (String) -> Unit = {},
-    val onDescriptionValueChange: (String) -> Unit = {},
-    val onSaveClick: () -> Unit = {}
-) {
-    fun isShowImage(): Boolean {
-        return url.isNotBlank()
-    }
-}
-
 @Composable
-fun ProductFormScreen(modifier: Modifier = Modifier, onSaveClick: (Product) -> Unit = {}) {
-    var url by rememberSaveable { mutableStateOf("") }
-    var name by rememberSaveable { mutableStateOf("") }
-    var price by rememberSaveable { mutableStateOf("") }
-    var isPriceError by rememberSaveable { mutableStateOf(false) }
-    var description by rememberSaveable { mutableStateOf("") }
+fun ProductFormScreen(
+    modifier: Modifier = Modifier,
+    viewModel: ProductFormScreenViewModel,
+    onSaveClick: (Product) -> Unit = {}
+) {
 
-    fun onPriceValueChange(value: String) {
-        isPriceError = try {
-            BigDecimal(value)
-            false
-        } catch (e:IllegalArgumentException) {
-            value.isNotEmpty()
-        }
-        price = value
-    }
+    val state by viewModel.uiState.collectAsState()
+    ProductFormScreen(
+        modifier = modifier,
+        state = state
+    )
 
-    fun onSaveClick() {
-        val convertedPrice = try {
-            BigDecimal(price)
-        } catch (e: NumberFormatException) {
-            BigDecimal.ZERO
-        }
-        val product = Product(
-            name = name,
-            image = url,
-            price = convertedPrice,
-            description = description
-        )
-        onSaveClick(product)
-    }
-
-    val state = remember(url, name, price, description, isPriceError) {
-        ProductFormScreenUiState(
-            url = url,
-            name = name,
-            price = price,
-            description = description,
-            isPriceError = isPriceError,
-            onUrlValueChange = { url = it },
-            onNameValueChange = { name = it },
-            onPriceValueChange = { onPriceValueChange(it) },
-            onDescriptionValueChange = { description = it },
-            onSaveClick = { onSaveClick() }
-        )
-    }
+//    fun onSaveClick() {
+//        val convertedPrice = try {
+//            BigDecimal(price)
+//        } catch (e: NumberFormatException) {
+//            BigDecimal.ZERO
+//        }
+//        val product = Product(
+//            name = name,
+//            image = url,
+//            price = convertedPrice,
+//            description = description
+//        )
+//        onSaveClick(product)
+//    }
 
     ProductFormScreen(
         modifier = modifier,
