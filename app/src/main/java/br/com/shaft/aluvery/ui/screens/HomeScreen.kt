@@ -10,65 +10,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.com.shaft.aluvery.models.Product
-import br.com.shaft.aluvery.sampledata.sampleCandies
-import br.com.shaft.aluvery.sampledata.sampleDrinks
-import br.com.shaft.aluvery.sampledata.sampleProducts
 import br.com.shaft.aluvery.sampledata.sampleSections
 import br.com.shaft.aluvery.ui.components.CardProductItem
 import br.com.shaft.aluvery.ui.components.ProductsSection
 import br.com.shaft.aluvery.ui.components.SearchTextField
+import br.com.shaft.aluvery.ui.states.HomeScreenUiState
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
-
-class HomeScreenUiState(
-    val sections: Map<String, List<Product>> = emptyMap(),
-    val filteredProducts: List<Product> = emptyList(),
-    val searchText: String = "",
-    val onSearchChange: (String) -> Unit = {}) {
-
-    fun isShowSections(): Boolean {
-        return searchText.isBlank()
-    }
-}
+import br.com.shaft.aluvery.ui.viewmodels.HomeScreenViewModel
 
 @Composable
-fun HomeScreen(products: List<Product>) {
-    val sections = mapOf(
-        "Todos produtos" to products,
-        "Promoções" to sampleDrinks + sampleCandies,
-        "Doces" to sampleCandies,
-        "Bebidas" to sampleDrinks,
-    )
+fun HomeScreen(viewModel: HomeScreenViewModel) {
 
-    var searchText by rememberSaveable { mutableStateOf("") }
-
-    fun containsInNameOrDescription() = { product: Product ->
-        product.name.contains(searchText, ignoreCase = true) || product.description?.contains(
-            searchText, ignoreCase = true
-        ) ?: false
-    }
-
-    val filteredProducts = remember(searchText, products) {
-        if (searchText.isNotBlank()) {
-            sampleProducts.filter(containsInNameOrDescription()) +
-                    products.filter(containsInNameOrDescription())
-        } else emptyList()
-    }
-
-    val state = remember(products, searchText) { HomeScreenUiState(
-        sections = sections,
-        filteredProducts = filteredProducts,
-        searchText = searchText,
-        onSearchChange = { searchText = it }
-    ) }
+    val state = viewModel.uiState
     HomeScreen(state)
 }
 
