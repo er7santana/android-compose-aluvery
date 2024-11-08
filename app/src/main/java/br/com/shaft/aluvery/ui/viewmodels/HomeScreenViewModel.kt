@@ -28,10 +28,12 @@ class HomeScreenViewModel: ViewModel() {
         viewModelScope.launch {
             dao.products().collect { products ->
                 val sections = mapOf(
-                    "Drinks" to sampleDrinks,
-                    "Candies" to sampleCandies
+                    "Todos os produtos" to products,
+                    "Promoções" to sampleDrinks + sampleCandies,
+                    "Doces" to sampleDrinks,
+                    "Bebidas" to sampleCandies
                 )
-                uiState = uiState.copy(sections = sections/*, filteredProducts = filteredProducts(uiState.searchText)*/)
+                uiState = uiState.copy(sections = sections, filteredProducts = filteredProducts(uiState.searchText))
             }
         }
     }
