@@ -38,7 +38,8 @@ import coil3.compose.AsyncImage
 fun CardProductItem(
     product: Product,
     modifier: Modifier = Modifier,
-    elevation: Dp = 4.dp
+    elevation: Dp = 4.dp,
+    isExpanded: Boolean = false
 ) {
     Surface(
         modifier
@@ -49,7 +50,7 @@ fun CardProductItem(
         shadowElevation = elevation
         ) {
 
-        var expanded by remember { mutableStateOf(false) }
+        var expanded by remember { mutableStateOf(isExpanded) }
 
         Column(
             Modifier
@@ -79,15 +80,17 @@ fun CardProductItem(
                     fontWeight = FontWeight.SemiBold
                 )
             }
-            product.description?.let { description ->
-                if (description.isNotBlank()) {
-                    Text(
-                        text = product.description,
-                        Modifier
-                            .padding(16.dp),
-                        maxLines = if (expanded) Int.MAX_VALUE else 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
+            if (expanded) {
+                product.description?.let { description ->
+                    if (description.isNotBlank()) {
+                        Text(
+                            text = product.description,
+                            Modifier
+                                .padding(16.dp),
+//                        maxLines = if (expanded) Int.MAX_VALUE else 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             }
         }
@@ -122,6 +125,23 @@ private fun CardProductItemWithDescriptionPreview() {
                     image = "https://www.example.com/image.jpg",
                     description = LoremIpsum(50).values.first()
                 )
+            )
+        }
+    }
+}
+@Preview
+@Composable
+private fun CardProductItemWithDescriptionExpandedPreview() {
+    AluveryTheme {
+        Surface {
+            CardProductItem(
+                product = Product(
+                    name = "Product Name",
+                    price = 100.0.toBigDecimal(),
+                    image = "https://www.example.com/image.jpg",
+                    description = LoremIpsum(50).values.first(),
+                ),
+                isExpanded = true
             )
         }
     }
