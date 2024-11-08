@@ -17,10 +17,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -31,49 +27,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.shaft.aluvery.R
-import br.com.shaft.aluvery.models.Product
 import br.com.shaft.aluvery.ui.states.ProductFormScreenUiState
 import br.com.shaft.aluvery.ui.theme.AluveryTheme
 import br.com.shaft.aluvery.ui.viewmodels.ProductFormScreenViewModel
 import coil3.compose.AsyncImage
-import java.math.BigDecimal
 
 @Composable
 fun ProductFormScreen(
     modifier: Modifier = Modifier,
     viewModel: ProductFormScreenViewModel,
-    onSaveClick: (Product) -> Unit = {}
+    onSaveClick: () -> Unit = {}
 ) {
 
     val state by viewModel.uiState.collectAsState()
     ProductFormScreen(
         modifier = modifier,
-        state = state
-    )
-
-//    fun onSaveClick() {
-//        val convertedPrice = try {
-//            BigDecimal(price)
-//        } catch (e: NumberFormatException) {
-//            BigDecimal.ZERO
-//        }
-//        val product = Product(
-//            name = name,
-//            image = url,
-//            price = convertedPrice,
-//            description = description
-//        )
-//        onSaveClick(product)
-//    }
-
-    ProductFormScreen(
-        modifier = modifier,
-        state = state
+        state = state,
+        onSaveClick = {
+            viewModel.save()
+            onSaveClick()
+        }
     )
 }
 
 @Composable
-fun ProductFormScreen(modifier: Modifier = Modifier, state: ProductFormScreenUiState = ProductFormScreenUiState()) {
+fun ProductFormScreen(
+    modifier: Modifier = Modifier,
+    state: ProductFormScreenUiState = ProductFormScreenUiState(),
+    onSaveClick: () -> Unit = {}
+) {
     Column(
         modifier = modifier
             .padding(16.dp)
@@ -158,7 +140,7 @@ fun ProductFormScreen(modifier: Modifier = Modifier, state: ProductFormScreenUiS
             onValueChange = { state.onDescriptionValueChange(it) }
         )
         Button(onClick = {
-            state.onSaveClick()
+            onSaveClick()
         }, Modifier.fillMaxWidth()) {
             Text("Salvar")
         }
